@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "managa.db-default",
+      "type": "java.lang.String",
+      "description": "Description for affiliate.data-default."
+    },
+    {
+      "name": "managa.allow-endpoint",
+      "type": "java.lang.String",
+      "description": "Description for affiliate.allow-endpoint."
+    }
+  ] }

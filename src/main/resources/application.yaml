@@ -1,0 +1,16 @@
+server:
+  port: 9006
+  application:
+    name: affiliate-tracking
+
+managa:
+  db-default: manga
+  allow-endpoint:
+    - "/auth/login"
+    - "/tracks/**"
+    - "/incomes/**"
+    - "/v3/api-docs"
+    - "/configuration/**"
+    - "/swagger*/**"
+
+
