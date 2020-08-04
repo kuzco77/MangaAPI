@@ -1,28 +1,37 @@
 package com.hust.manga.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
 @Entity
 @Table(name = "chapter_detail")
 public class ChapterDetail {
-    private int id;
+    @SerializedName("manga_id")
+    private Integer id;
+    @SerializedName("id")
     private String originId;
+    @SerializedName("number")
     private Integer number;
+    @SerializedName("url")
     private String url;
-    private Integer chapterId;
+    @SerializedName("chapterId")
+    private String chapterId;
+    @SerializedName("width")
     private Integer width;
+    @SerializedName("height")
     private Integer height;
     private Timestamp addDate;
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -58,11 +67,11 @@ public class ChapterDetail {
 
     @Basic
     @Column(name = "chapter_id")
-    public Integer getChapterId() {
+    public String getChapterId() {
         return chapterId;
     }
 
-    public void setChapterId(Integer chapterId) {
+    public void setChapterId(String chapterId) {
         this.chapterId = chapterId;
     }
 

@@ -1,19 +1,29 @@
 package com.hust.manga.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
 @Entity
 @Table(name = "chapter")
 public class Chapter {
+    @SerializedName("manga_id")
     private int id;
+    @SerializedName("id")
     private String originId;
+    @SerializedName("mangaImage")
     private String mangaImage;
+    @SerializedName("mangaTitle")
     private String mangaTitle;
-    private Integer mangaId;
-    private Integer keyGet;
+    @SerializedName("mangaId")
+    private String mangaId;
+    @SerializedName("keyGet")
+    private String keyGet;
+    @SerializedName("number")
     private Integer number;
-    private String createAt;
+    @SerializedName("chapterCreatedAt")
+    private Long createdAt;
     private Timestamp addDate;
 
     @Id
@@ -59,21 +69,21 @@ public class Chapter {
 
     @Basic
     @Column(name = "manga_id")
-    public Integer getMangaId() {
+    public String getMangaId() {
         return mangaId;
     }
 
-    public void setMangaId(Integer mangaId) {
+    public void setMangaId(String mangaId) {
         this.mangaId = mangaId;
     }
 
     @Basic
     @Column(name = "key_get")
-    public Integer getKeyGet() {
+    public String getKeyGet() {
         return keyGet;
     }
 
-    public void setKeyGet(Integer keyGet) {
+    public void setKeyGet(String keyGet) {
         this.keyGet = keyGet;
     }
 
@@ -88,13 +98,13 @@ public class Chapter {
     }
 
     @Basic
-    @Column(name = "create_at")
-    public String getCreateAt() {
-        return createAt;
+    @Column(name = "created_at")
+    public Long getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreateAt(String createAt) {
-        this.createAt = createAt;
+    public void setCreatedAt(Long createAt) {
+        this.createdAt = createAt;
     }
 
     @Basic
@@ -119,12 +129,12 @@ public class Chapter {
                 Objects.equals(mangaId, chapter.mangaId) &&
                 Objects.equals(keyGet, chapter.keyGet) &&
                 Objects.equals(number, chapter.number) &&
-                Objects.equals(createAt, chapter.createAt) &&
+                Objects.equals(createdAt, chapter.createdAt) &&
                 Objects.equals(addDate, chapter.addDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, originId, mangaImage, mangaTitle, mangaId, keyGet, number, createAt, addDate);
+        return Objects.hash(id, originId, mangaImage, mangaTitle, mangaId, keyGet, number, createdAt, addDate);
     }
 }

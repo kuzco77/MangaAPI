@@ -1,16 +1,12 @@
 package com.hust.manga.core.db;
 
 
-import com.hust.manga.core.PageRequest;
-
 import com.hust.manga.core.res.PageResponse;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.LogicalExpression;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,7 +23,7 @@ import java.util.Optional;
 public class CRUDService<T, ID extends Serializable> {
     public Class<T> entityClass;
     @Autowired
-    ConnectorManager connectorManager;
+    protected ConnectorManager connectorManager;
     public static final int DEFAULT_PAGE = 1;
     public static final int DEFAULT_LIMIT = 10;
 
@@ -90,11 +86,8 @@ public class CRUDService<T, ID extends Serializable> {
         Session session = getSession(db);
         try {
             Criteria criteria = session.createCriteria(entityClass);
-            Criterion criterionIsDeleted = Restrictions.eq("audit.delFlag", false);
-
             Criterion criterionId = Restrictions.eq("id", id);
-            LogicalExpression andExp = Restrictions.and(criterionId, criterionIsDeleted);
-            criteria.add(andExp);
+            criteria.add(criterionId);
             T t = (T) criteria.uniqueResult();
             session.close();
             return Optional.ofNullable(t);
@@ -103,6 +96,7 @@ public class CRUDService<T, ID extends Serializable> {
             return Optional.empty();
         }
     }
+
 
     public Optional<T> update(String db, T entity) {
         Session session = getSession(db);
@@ -172,36 +166,22 @@ public class CRUDService<T, ID extends Serializable> {
     }
 
     @SuppressWarnings("unchecked")
-    public PageResponse<T> getPage(String db, PageRequest pageRequest) {
-        if (pageRequest.limit == null || pageRequest.limit == 0) pageRequest.limit = DEFAULT_LIMIT;
-        if (pageRequest.page == null || pageRequest.page == 0) pageRequest.page = DEFAULT_LIMIT;
+    public PageResponse<T> getPage(String db, int limit, int page) {
+        if (limit == 0) limit = DEFAULT_LIMIT;
+        if (page == 0) page = DEFAULT_PAGE;
 
         Session session = getSession(db);
         Criteria criteria = session.createCriteria(entityClass);
-        int realPage = pageRequest.page - 1;
+        int realPage = page - 1;
+        criteria.setFirstResult(realPage * limit);
+        criteria.setMaxResults(limit);
         List<T> data = criteria.list();
         int total = data.size();
-        criteria.setFirstResult(realPage * pageRequest.limit);
-        criteria.setMaxResults(pageRequest.limit);
-        if (pageRequest.property != null && pageRequest.direction != null)
-            switch (pageRequest.direction) {
-                case "ASC": {
-                    criteria.addOrder(Order.asc(pageRequest.property));
-                    break;
-                }
-                case "DESC": {
-                    criteria.addOrder(Order.desc(pageRequest.property));
-                    break;
-                }
-                default: {
-                    criteria.addOrder(Order.asc("id"));
-                }
-            }
 
         PageResponse<T> pageResponse = new PageResponse<T>();
         pageResponse.list = data;
-        pageResponse.limit = pageRequest.limit;
-        pageResponse.page = pageRequest.page;
+        pageResponse.limit = limit;
+        pageResponse.page = page;
         pageResponse.total = total;
         session.close();
         return pageResponse;
