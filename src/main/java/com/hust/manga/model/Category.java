@@ -11,7 +11,7 @@ import java.util.Objects;
 @Table(name = "category")
 public class Category {
 
-    @SerializedName("createdsdsdsdsdAt")
+    @SerializedName("manga_id")
     private Integer id = 0;
     @Expose
     @SerializedName("createdAt")

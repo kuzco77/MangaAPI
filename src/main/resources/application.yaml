@@ -3,6 +3,7 @@ server:
   application:
     name: affiliate-tracking
 
+
 managa:
   db-default: manga
   allow-endpoint:
@@ -12,5 +13,6 @@ managa:
     - "/v3/api-docs"
     - "/configuration/**"
     - "/swagger*/**"
+
 
 
